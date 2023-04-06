@@ -1,0 +1,14 @@
+<div class="myxblock_block">
+    {% if container == None %}
+    <iframe class="iframe" style="width:100%; height:470px; border: 1px solid black;" src="" ></iframe>
+    <br><button class="create-lab">Start Lab!</button>
+    <button class="stop-lab">Stop Lab!</button>
+    <p id="webAccess" style="display:none">Web access: <a href="" target="_blank">Click me!</a></p>
+    {% else %}
+    <iframe class="iframe" style="width:100%; height:470px; border: 1px solid black;" src="{{self.container}}" ></iframe>
+    <p id="myElem" style="display:none">Lab stopped!</p>
+    <br><button class="create-lab">Start Lab!</button>
+    <button class="stop-lab">Stop Lab!</button>
+    <p id="webAccess">Web access: <a href="{{self.extra_link}}" target="_blank">Click me!</a></p>
+    {% endif %}
+</div>
