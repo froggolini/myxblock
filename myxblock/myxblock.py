@@ -1,5 +1,6 @@
 """TO-DO: Write a description of what this XBlock is."""
 
+import os
 import pkg_resources
 import random
 import string
@@ -15,8 +16,8 @@ from .utils import render_template
 requests.packages.urllib3.disable_warnings()
 
 # Configure the API endpoint
-host_ip = 'x'
-api_key = 'x'
+host_ip = os.getenv('HOST_IP')
+api_key = os.getenv('API_KEY')
 headers = {'X-API-Key': api_key, 'Content-Type': 'application/json'}
 
 # Generate a random name for the container
