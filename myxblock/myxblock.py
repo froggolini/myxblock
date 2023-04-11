@@ -118,7 +118,7 @@ class MyXBlock(XBlock):
             # Create the container
             create_url = f'https://{host_ip}:9443/api/endpoints/2/docker/containers/create?name={container_name}'
             create_payload = {
-            'Image': 'web-upload:latest',
+            'Image': 'web-xss:latest',
             'Tty': True,
             'ExposedPorts': {'80/tcp': {}},
             'HostConfig': {'PortBindings': {'80/tcp': [{'HostPort': ''}]}}
