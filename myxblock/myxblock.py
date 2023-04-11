@@ -15,8 +15,8 @@ from .utils import render_template
 requests.packages.urllib3.disable_warnings()
 
 # Configure the API endpoint
-host_ip = '54.209.104.137'
-api_key = 'ptr_vPjGUXoppT7x9Q9/LH36teSH9RyM40tyXzqCyS4tplE='
+host_ip = 'x'
+api_key = 'x'
 headers = {'X-API-Key': api_key, 'Content-Type': 'application/json'}
 
 # Generate a random name for the container
