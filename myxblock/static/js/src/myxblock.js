@@ -13,8 +13,8 @@ function MyXBlock(runtime, element) {
         if (selectedOption === "sqli") {
             $("#webAccess a").prop("href", result.web_url) 
             $("#phpAccess a").prop("href", result.php_url) 
-            $("#sshAccess a").prop("href", result.ssh_ip) 
-            $("#dbAccess a").prop("href", result.db_ip) 
+            $("#sshAccess a").text(result.ssh_ip)
+            $("#dbAccess a").text(result.db_ip) 
         } else if (selectedOption === "xss") {
             $("#webAccess a").prop("href", result.web_url) 
         }
