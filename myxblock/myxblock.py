@@ -15,8 +15,8 @@ from .utils import render_template
 requests.packages.urllib3.disable_warnings()
 
 # Configure the API endpoint
-host_ip = 'x'
-api_key = 'x'
+host_ip = '54.209.104.137'
+api_key = 'ptr_vPjGUXoppT7x9Q9/LH36teSH9RyM40tyXzqCyS4tplE='
 headers = {'X-API-Key': api_key, 'Content-Type': 'application/json'}
 
 # Generate a random name for the container
@@ -60,6 +60,11 @@ class MyXBlock(XBlock):
         help="IP for db",
     )
 
+    selected_value = String(
+        default=None, scope=Scope.user_state,
+        help="Image name",
+    )
+
 
     container_name = String(
         default=None, scope=Scope.user_state,
@@ -84,6 +89,7 @@ class MyXBlock(XBlock):
             'extra_link_2': self.extra_link_2,
             'ssh_ip': self.ssh_ip,
             'db_ip': self.db_ip,
+            'image_name': self.selected_value
         }
 
         frag = Fragment()
@@ -103,8 +109,9 @@ class MyXBlock(XBlock):
         if data['imageName'] not in ('xss', 'sqli'):
             print('error!')
             return
+        
         if data['imageName'] == 'xss':
-            
+            self.selected_value = data['imageName']
             container_name = 'xss-' + ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits, k=32))
             
             # Create the container
@@ -137,6 +144,7 @@ class MyXBlock(XBlock):
             self.extra_link = web_url
 
         else:
+            self.selected_value = data['imageName']
             container_name = 'sqli-' + ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits, k=32))
             container_name = container_name.lower()
 
@@ -208,26 +216,25 @@ class MyXBlock(XBlock):
             url = f'https://{host_ip}:9443/api/endpoints/2/docker/containers/{self.container_name}?v=true&force=true'
             response = requests.delete(url, headers=headers, data='{}', verify=False)
 
-            self.container = None
-            self.extra_link = None
-            self.container_name = None
-
-            return {'message': 'Container deleted.'}
+            print("deleted")
         else:
             # Delete the container
             url = f'https://{host_ip}:9443/api/stacks/{self.stack_id}?endpointId=2'
             response = requests.delete(url, headers=headers, verify=False)
 
             print("deleted")
-            self.container = None
-            self.extra_link = None
-            self.extra_link_2 = None
-            self.container_name = None
-            self.stack_id = 0
-            self.ssh_ip = None
-            self.db_ip = None
+            
+        self.container = None
+        self.extra_link = None
+        self.extra_link_2 = None
+        self.container_name = None
+        self.stack_id = 0
+        self.ssh_ip = None
+        self.db_ip = None
+        self.selected_value = None
 
-            return {'message': 'Container deleted.'}
+        return {'message': 'Container deleted.'}
+            
     
 
     # TO-DO: change this to create the scenarios you'd like to see in the
