@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+    php-apache-environment:
+        image: web-sqli
+        depends_on:
+            - db
+        ports:
+            - "80"
+            - "22"
+        networks:
+            - attack-defend
+    attacker: 
+        image: "attacker"
+        depends_on:
+            - db
+        tty: true
+        networks:
+            - attack-defend
+    db:
+        image: mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: "password"
+            MYSQL_DATABASE: "sqli"
+            MYSQL_USER: "admin"
+            MYSQL_PASSWORD: "password"
+        ports:
+            - "3306"
+        networks:
+            - attack-defend
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - "80"
+        restart: always
+        environment:
+            PMA_HOST: db
+        depends_on:
+            - db
+        networks:
+            - attack-defend
+networks:
+    attack-defend:
+        driver: bridge
+
+
