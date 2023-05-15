@@ -1,26 +1,35 @@
 <div class="myxblock_block">
-    <h1>{{section_name}}</h1>
-    <select id="selector">
-        <option value="xss">XSS</option>
-        <option value="sqli">SQL Injection</option>
-    </select>
-
     {% if container == None %}
     <iframe class="iframe" style="width:100%; height:500px; border: 1px solid black;" src="" ></iframe>
     <br><button class="create-lab">Start Lab!</button>
     <button class="stop-lab">Stop Lab!</button>
     <div class="placeholderSqli" style="display:none">
-        <p id="webAccess">Web access: <a href="" target="_blank">Click me!</a></p>
-        <p id="phpAccess">Phpmyadmin access: <a href="" target="_blank">Click me!</a></p>
-        <p id="sshAccess">SSH ip: <a href="" target="_blank"></a></p>
-        <p id="dbAccess">DB ip: <a href="" target="_blank"></a></p>
-        <p id="creds">SSH = defender:password<br>DB = admin:password</p>
+        <br>
+        <button class="accordion">Web & PhpMyAdmin Access</button>
+        <div class="panel">
+            <p>Anda dapat mengakses web app SQLi dan PhpMyAdmin pada link berikut:</p>
+            <p id="webAccess"><a href="" target="_blank">Web App</a></p>
+            <p id="phpAccess"><a href="" target="_blank">PhpMyAdmin</a></p>
+        </div>
+        <button class="accordion">SSH Access to defender (web app)</button>
+        <div class="panel">
+            <p>Anda dapat SSH ke server web dengan perintah berikut dengan password "password":</p>
+            <p class="code" id="sshAccess">$ ssh defender@{{self.ssh_ip}}</p>
+        </div>
+        <button class="accordion">DB Configuration</button>
+        <div class="panel">
+            <p>Anda dapat mengganti konfigurasi DB pada file /var/www/html/config.php dengan:</p>
+            <p class="code" id="dbAccess">$conn = mysqli_connect("{{self.db_ip}}","admin","password");</p>
+        </div>
     </div>
     <div class="placeholderXss" style="display:none">
-        <p id="webAccess">Web access: <a href="" target="_blank">Click me!</a></p>
+        <button class="accordion">Web Access</button>
+        <div class="panel">
+            <p>Anda dapat mengakses web app XSS pada link berikut:</p>
+            <p id="webAccess"><a href="" target="_blank">Click me!</a></p>
+        </div>
     </div>
     
-
     {% else %}
     <iframe class="iframe" style="width:100%; height:470px; border: 1px solid black;" src="{{self.container}}" ></iframe>
     <p id="myElem" style="display:none">Lab stopped!</p>
@@ -29,15 +38,31 @@
 
     {% if image_name == 'sqli' %}
     <div class="placeholderSqli">
-        <p id="webAccess">Web access: <a href="{{self.extra_link}}" target="_blank">Click me!</a></p>
-        <p id="phpAccess">Phpmyadmin access: <a href="{{self.extra_link_2}}" target="_blank">Click me!</a></p>
-        <p id="sshAccess">SSH ip: <a href="{{self.ssh_ip}}" target="_blank">{{self.ssh_ip}}</a></p>
-        <p id="dbAccess">DB ip: <a href="{{self.db_ip}}" target="_blank">{{self.db_ip}}</a></p>
-        <p id="creds">SSH = defender:password<br>DB = admin:password</p>
+        <br>
+        <button class="accordion">Web & PhpMyAdmin Access</button>
+        <div class="panel">
+            <p>Anda dapat mengakses web app SQLi dan PhpMyAdmin pada link berikut:</p>
+            <p id="webAccess"><a href="{{self.extra_link}}" target="_blank">Web App</a></p>
+            <p id="phpAccess"><a href="{{self.extra_link_2}}" target="_blank">PhpMyAdmin</a></p>
+        </div>
+        <button class="accordion">SSH Access to defender (web app)</button>
+        <div class="panel">
+            <p>Anda dapat SSH ke server web dengan perintah berikut dengan password "password":</p>
+            <p class="code" id="sshAccess">$ ssh defender@{{self.ssh_ip}}</p>
+        </div>
+        <button class="accordion">DB Configuration</button>
+        <div class="panel">
+            <p>Anda dapat mengganti konfigurasi DB pada file /var/www/html/config.php dengan:</p>
+            <p class="code" id="dbAccess">$conn = mysqli_connect("{{self.db_ip}}","admin","password");</p>
+        </div>
     </div>
     {% elif image_name == 'xss' %}
     <div class="placeholderXss">
-        <p id="webAccess">Web access: <a href="{{self.extra_link}}" target="_blank">Click me!</a></p>
+        <button class="accordion">Web Access</button>
+        <div class="panel">
+            <p>Anda dapat mengakses web app XSS pada link berikut:</p>
+            <p id="webAccess"><a href="{{self.extra_link}}" target="_blank">Click me!</a></p>
+        </div>
     </div>
 
     {% endif %}

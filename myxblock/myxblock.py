@@ -68,7 +68,6 @@ class MyXBlock(XBlock):
         help="Image name",
     )
 
-
     container_name = String(
         default=None, scope=Scope.user_state,
         help="Container name",
@@ -76,8 +75,8 @@ class MyXBlock(XBlock):
 
     xblock_type = String(
         help=("Xblock type for course selector"),
-		default="xss",
-        scope=Scope.settings
+		default="sqli",
+        scope=Scope.user_state_summary
     )
 
     def resource_string(self, path):
@@ -100,13 +99,14 @@ class MyXBlock(XBlock):
             'ssh_ip': self.ssh_ip,
             'db_ip': self.db_ip,
             'image_name': self.selected_value,
+            'type': self.xblock_type
         }
         
         frag = Fragment()
         frag.add_content(render_template('static/html/myxblock.html', context))
         frag.add_css(self.resource_string("static/css/myxblock.css"))
         frag.add_javascript(self.resource_string("static/js/src/myxblock.js"))
-        frag.initialize_js('MyXBlock')
+        frag.initialize_js('MyXBlock', {'type': self.xblock_type})
         return frag
     
     def studio_view(self, context=None):
