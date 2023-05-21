@@ -11,6 +11,7 @@ from web_fragments.fragment import Fragment
 from xblock.core import XBlock
 from xblock.fields import  Scope, Integer, String, Boolean
 from .utils import render_template, xblock_field_list
+from xblockutils.studio_editable import StudioEditableXBlockMixin
 
 import logging
 log = logging.getLogger(__name__)
@@ -24,8 +25,9 @@ api_key = 'x'
 headers = {'X-API-Key': api_key, 'Content-Type': 'application/json'}
 
 container_name = ''
-@XBlock.wants('user')
-class MyXBlock(XBlock):
+
+@XBlock.needs("i18n")
+class MyXBlock(StudioEditableXBlockMixin, XBlock):
     """
     TO-DO: document what your XBlock does.
     """
@@ -74,10 +76,13 @@ class MyXBlock(XBlock):
     )
 
     xblock_type = String(
-        help=("Xblock type for course selector"),
-		default="sqli",
-        scope=Scope.settings
+        display_name="Image type",
+        help="Image for the lab. Available = xss / sqli",
+        default='xss',
+        scope=Scope.content
     )
+    editable_fields = ('xblock_type', 'display_name')
+
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -107,21 +112,6 @@ class MyXBlock(XBlock):
         frag.add_css(self.resource_string("static/css/myxblock.css"))
         frag.add_javascript(self.resource_string("static/js/src/myxblock.js"))
         frag.initialize_js('MyXBlock', {'type': self.xblock_type})
-        return frag
-    
-    def studio_view(self, context=None):
-        """
-        The studio view of the MyXBlock, with form
-        """
-        context = {
-            'self': self,
-            'fields': xblock_field_list(self, [ "xblock_type" ])
-        }
-
-        frag = Fragment()
-        frag.add_content(render_template('static/html/myxblock-edit.html', context))
-        frag.add_javascript(self.resource_string("static/js/src/myxblock-edit.js"))
-        frag.initialize_js('MyXBlock')
         return frag
     
     # TO-DO: change this handler to perform your own actions.  You may need more
