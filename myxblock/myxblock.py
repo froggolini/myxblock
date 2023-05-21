@@ -76,7 +76,7 @@ class MyXBlock(XBlock):
     xblock_type = String(
         help=("Xblock type for course selector"),
 		default="sqli",
-        scope=Scope.user_state_summary
+        scope=Scope.settings
     )
 
     def resource_string(self, path):
