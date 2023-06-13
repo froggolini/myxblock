@@ -7,13 +7,16 @@ import string
 import requests
 import json
 import fnmatch
+import time
+import logging
+from datetime import datetime
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
 from xblock.fields import  Scope, Integer, String, Boolean
-from .utils import render_template, xblock_field_list
+from .utils import render_template
 from xblockutils.studio_editable import StudioEditableXBlockMixin
 
-import logging
+# Logging
 log = logging.getLogger(__name__)
 
 # Disable SSL verification 
@@ -21,20 +24,13 @@ requests.packages.urllib3.disable_warnings()
 
 # Portainer API
 host_ip = '44.214.9.8'
-api_key = 'x'
+api_key = 'xx'
 headers = {'X-API-Key': api_key, 'Content-Type': 'application/json'}
 
 container_name = ''
 
 @XBlock.needs("i18n")
 class MyXBlock(StudioEditableXBlockMixin, XBlock):
-    """
-    TO-DO: document what your XBlock does.
-    """
-
-    # Fields are defined on the class.  You can access them in your code as
-    # self.<fieldname>.
-
     stack_id = Integer(
         default=0, scope=Scope.user_state,
         help="Stack ID",
@@ -83,14 +79,11 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
     )
     editable_fields = ('xblock_type', 'display_name')
 
-
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
         data = pkg_resources.resource_string(__name__, path)
         return data.decode("utf8")
 
-
-    # TO-DO: change this view to display your data your own way.
     def student_view(self, context=None):
         """
         The primary view of the MyXBlock, shown to students
@@ -113,9 +106,7 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
         frag.add_javascript(self.resource_string("static/js/src/myxblock.js"))
         frag.initialize_js('MyXBlock', {'type': self.xblock_type})
         return frag
-    
-    # TO-DO: change this handler to perform your own actions.  You may need more
-    # than one handler, or you may not need any handlers at all.
+
     @XBlock.json_handler
     def studio_submit(self, submissions, suffix=''):
         if submissions['xblock_type']== "":
@@ -136,6 +127,8 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
         """
         Creating container.
         """
+        start = time.perf_counter()
+        
         if data['imageName'] not in ('xss', 'sqli'):
             print('error!')
             return
@@ -153,6 +146,8 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
             'HostConfig': {'PortBindings': {'80/tcp': [{'HostPort': ''}]}}
         }
             response = requests.post(create_url, headers=headers, data=json.dumps(create_payload), verify=False)
+            dateTimeObj = datetime.now()
+            print("[{}]  -  POST {}  -  {}".format(dateTimeObj,"/create",response.elapsed))
 
             # Start 
             start_url = f'https://{host_ip}:9443/api/endpoints/2/docker/containers/{container_name}/start'
@@ -188,7 +183,9 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
             })
             response = requests.post(create_stack_url, headers=headers, data=payload, verify=False)
             self.stack_id = response.json()["Id"]
-            print(self.stack_id)
+
+            dateTimeObj = datetime.now()
+            print("[{}]  -  POST {}  -  {}".format(dateTimeObj,"/stacks",response.elapsed))
 
             # Get phpmyadmin port
             get_phpmyadmin = f"https://{host_ip}:9443/api/endpoints/2/docker/containers/json?filters={{\"label\": [\"com.docker.compose.project={container_name}\"], \"name\": [\"phpmy\"]}}" 
@@ -232,6 +229,8 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
             
 
         self.container_name = container_name
+        request_time = time.perf_counter() - start
+        print("Start container request completed in {0:.0f}s".format(request_time))
         
         return {"container": self.container, "web_url": self.extra_link, "php_url": self.extra_link_2, "ssh_ip": self.ssh_ip, "db_ip": self.db_ip}
     
@@ -240,19 +239,28 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
         """
         Stopping container.
         """
+        start = time.perf_counter()
+
         if data['imageName'] == 'xss':
             # Delete the container
             url = f'https://{host_ip}:9443/api/endpoints/2/docker/containers/{self.container_name}?v=true&force=true'
             response = requests.delete(url, headers=headers, data='{}', verify=False)
-
+            
+            dateTimeObj = datetime.now()
+            print("[{}]  -  DELETE {}  -  {}".format(dateTimeObj,"/containers",response.elapsed))
             print("deleted")
         else:
             # Delete the container
             url = f'https://{host_ip}:9443/api/stacks/{self.stack_id}?endpointId=2'
             response = requests.delete(url, headers=headers, verify=False)
 
+            dateTimeObj = datetime.now()
+            print("[{}]  -  DELETE {}  -  {}".format(dateTimeObj,"/stacks",response.elapsed))
             print("deleted")
-            
+        
+        request_time = time.perf_counter() - start
+        print("Delete container request completed in {0:.0f}s".format(request_time))
+
         self.container = None
         self.extra_link = None
         self.extra_link_2 = None
@@ -264,7 +272,6 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
 
         return {'message': 'Container deleted.'}
             
-    
 
     # TO-DO: change this to create the scenarios you'd like to see in the
     # workbench while developing your XBlock.

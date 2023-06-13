@@ -20,6 +20,7 @@ function MyXBlock(runtime, element, xblock_type) {
         $('.placeholderSqli').toggle(xblock_type.type === 'sqli');
         $(".create-lab").attr("disabled", true);
         $('.iframe', element).attr('src', result.container);
+        $(".info").hide();
 
         if (xblock_type.type === "sqli") {
             $("#webAccess a").prop("href", result.web_url) 
@@ -38,12 +39,12 @@ function MyXBlock(runtime, element, xblock_type) {
         $("#phpAccess a").prop("href", "") 
         $("#dbAccess a").prop("href", "") 
 
-        $("#myElem").show(1000);
+        $(".info").text("Lab Stopped!").css('color','black');
+        setTimeout(function() { $(".info").hide(); }, 5000);
         $(".create-lab").attr("disabled", false);
         $('.placeholderXss').hide(xblock_type.type === 'xss');
         $('.placeholderSqli').hide(xblock_type.type === 'sqli');
-        $("#myElem").hide(5000);
-        $('#time').toggle();
+        
      
     }
     
@@ -51,6 +52,7 @@ function MyXBlock(runtime, element, xblock_type) {
     var handlerStartUrl = runtime.handlerUrl(element, 'create_container');
     
     $('.create-lab', element).click(function(eventObject) {
+        $(".info").text("Starting Lab, please wait...");
         $.ajax({
             type: "POST",
             url: handlerStartUrl,
@@ -71,6 +73,8 @@ function MyXBlock(runtime, element, xblock_type) {
     var handlerStopUrl = runtime.handlerUrl(element, 'stop_container');
 
     $('.stop-lab', element).click(function(eventObject) {
+        $(".info").show();
+        $(".info").text("Stopping Lab, please wait...").css('color','white');
         $.ajax({
             type: "POST",
             url: handlerStopUrl,

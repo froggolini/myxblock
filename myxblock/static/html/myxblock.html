@@ -1,4 +1,5 @@
 <div class="myxblock_block">
+    <p class="info"></p>
     {% if container == None %}
     <iframe class="iframe" style="width:100%; height:500px; border: 1px solid black;" src="" ></iframe>
     <br><button class="create-lab">Start Lab!</button>
@@ -32,7 +33,6 @@
     
     {% else %}
     <iframe class="iframe" style="width:100%; height:470px; border: 1px solid black;" src="{{self.container}}" ></iframe>
-    <p id="myElem" style="display:none">Lab stopped!</p>
     <br><button class="create-lab" disabled>Start Lab!</button>
     <button class="stop-lab">Stop Lab!</button>
 
@@ -67,4 +67,7 @@
 
     {% endif %}
     {% endif %}
+
+    <div class="progressbar"></div>
+
 </div>
