@@ -59,15 +59,17 @@ function MyXBlock(runtime, element, xblock_type) {
             data: JSON.stringify({"imageName": xblock_type.type}),
             success: updateLink
         });
-        started = true
         setTimeout(function() {
+            $(".info").show();
+            $(".info").html("Times Up!<br>Stopping Lab, please wait...").css('color','white');
+
             $.ajax({
               type: "POST",
               url: handlerStopUrl,
               data: JSON.stringify({"imageName": xblock_type.type}),
               success: resetLink
             });
-          }, 300000);
+          }, 20000);
     });
 
     var handlerStopUrl = runtime.handlerUrl(element, 'stop_container');

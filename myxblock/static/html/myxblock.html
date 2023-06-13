@@ -22,6 +22,7 @@
             <p>Anda dapat mengganti konfigurasi DB pada file /var/www/html/config.php dengan:</p>
             <p class="code" id="dbAccess">$conn = mysqli_connect("{{self.db_ip}}","admin","password");</p>
         </div>
+        <br>
     </div>
     <div class="placeholderXss" style="display:none">
         <button class="accordion">Web Access</button>
@@ -29,6 +30,7 @@
             <p>Anda dapat mengakses web app XSS pada link berikut:</p>
             <p id="webAccess"><a href="" target="_blank">Click me!</a></p>
         </div>
+        <br>
     </div>
     
     {% else %}
@@ -55,6 +57,7 @@
             <p>Anda dapat mengganti konfigurasi DB pada file /var/www/html/config.php dengan:</p>
             <p class="code" id="dbAccess">$conn = mysqli_connect("{{self.db_ip}}","admin","password");</p>
         </div>
+        <br>
     </div>
     {% elif image_name == 'xss' %}
     <div class="placeholderXss">
@@ -63,6 +66,7 @@
             <p>Anda dapat mengakses web app XSS pada link berikut:</p>
             <p id="webAccess"><a href="{{self.extra_link}}" target="_blank">Click me!</a></p>
         </div>
+        <br>
     </div>
 
     {% endif %}
