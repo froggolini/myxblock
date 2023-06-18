@@ -17,13 +17,18 @@ services:
         networks:
             - attack-defend
     db:
-        image: mysql
+        image: mysql-low
         restart: always
         environment:
             MYSQL_ROOT_PASSWORD: "password"
             MYSQL_DATABASE: "sqli"
             MYSQL_USER: "admin"
             MYSQL_PASSWORD: "password"
+        ulimits:
+            nproc: 65535
+            nofile:
+                soft: 20000
+                hard: 40000
         ports:
             - "3306"
         networks:

@@ -1,5 +1,3 @@
-"""TO-DO: Write a description of what this XBlock is."""
-
 import os
 import pkg_resources
 import random
@@ -24,7 +22,7 @@ requests.packages.urllib3.disable_warnings()
 
 # Portainer API
 host_ip = '44.214.9.8'
-api_key = 'xx'
+api_key = 'xxx'
 headers = {'X-API-Key': api_key, 'Content-Type': 'application/json'}
 
 container_name = ''
@@ -74,7 +72,7 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
     xblock_type = String(
         display_name="Image type",
         help="Image for the lab. Available = xss / sqli",
-        default='xss',
+        default='sqli',
         scope=Scope.content
     )
     editable_fields = ('xblock_type', 'display_name')
@@ -184,9 +182,6 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
             response = requests.post(create_stack_url, headers=headers, data=payload, verify=False)
             self.stack_id = response.json()["Id"]
 
-            dateTimeObj = datetime.now()
-            print("[{}]  -  POST {}  -  {}".format(dateTimeObj,"/stacks",response.elapsed))
-
             # Get phpmyadmin port
             get_phpmyadmin = f"https://{host_ip}:9443/api/endpoints/2/docker/containers/json?filters={{\"label\": [\"com.docker.compose.project={container_name}\"], \"name\": [\"phpmy\"]}}" 
             response = requests.get(get_phpmyadmin, headers=headers, data={}, verify=False)
@@ -223,11 +218,13 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
             web_url = f'http://{host_ip}:{apache_port}'
             phpmyadmin_url = f'http://{host_ip}:{phpmyadmin_port}'
 
+            dateTimeObj = datetime.now()
+            print("[{}]  -  POST {}  -  {}".format(dateTimeObj,"/stacks",response.elapsed))
+
             self.container = web_console_url
             self.extra_link = web_url
             self.extra_link_2 = phpmyadmin_url
             
-
         self.container_name = container_name
         request_time = time.perf_counter() - start
         print("Start container request completed in {0:.0f}s".format(request_time))
@@ -272,7 +269,6 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
 
         return {'message': 'Container deleted.'}
             
-
     # TO-DO: change this to create the scenarios you'd like to see in the
     # workbench while developing your XBlock.
     @staticmethod

@@ -1,4 +1,3 @@
-/* Javascript for MyXBlock. */
 function MyXBlock(runtime, element, xblock_type) {
     var acc = document.getElementsByClassName("accordion");
     var i;
@@ -25,8 +24,8 @@ function MyXBlock(runtime, element, xblock_type) {
         if (xblock_type.type === "sqli") {
             $("#webAccess a").prop("href", result.web_url) 
             $("#phpAccess a").prop("href", result.php_url) 
-            $("#sshAccess a").text(result.ssh_ip)
-            $("#dbAccess a").text(result.db_ip) 
+            $("#sshAccess").text("$ ssh defender@"+result.ssh_ip)
+            $("#dbAccess").text('$conn = mysqli_connect("'+result.db_ip+'","admin","password");') 
         } else if (xblock_type.type === "xss") {
             $("#webAccess a").prop("href", result.web_url) 
         }
@@ -69,7 +68,7 @@ function MyXBlock(runtime, element, xblock_type) {
               data: JSON.stringify({"imageName": xblock_type.type}),
               success: resetLink
             });
-          }, 20000);
+          }, 2000000);
     });
 
     var handlerStopUrl = runtime.handlerUrl(element, 'stop_container');
@@ -83,10 +82,5 @@ function MyXBlock(runtime, element, xblock_type) {
             data: JSON.stringify({"imageName": xblock_type.type}),
             success: resetLink
         });
-    });
-
-
-    $(function ($) {
-        /* Here's where you'd do things on page load. */
     });
 }
