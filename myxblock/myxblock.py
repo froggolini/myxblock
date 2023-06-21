@@ -142,14 +142,15 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
             'Tty': True,
             'ExposedPorts': {'80/tcp': {}},
             'HostConfig': {'PortBindings': {'80/tcp': [{'HostPort': ''}]}}
-        }
+            }
             response = requests.post(create_url, headers=headers, data=json.dumps(create_payload), verify=False)
-            dateTimeObj = datetime.now()
-            print("[{}]  -  POST {}  -  {}".format(dateTimeObj,"/create",response.elapsed))
-
+        
             # Start 
             start_url = f'https://{host_ip}:9443/api/endpoints/2/docker/containers/{container_name}/start'
             response = requests.post(start_url, headers=headers, data='{}', verify=False)
+
+            dateTimeObj = datetime.now()
+            print("[{}]  -  POST {}  -  {}".format(dateTimeObj,"/create",response.elapsed))
 
             # Inspect 
             inspect_url = f'https://{host_ip}:9443/api/endpoints/2/docker/containers/{container_name}/json?all=true'
@@ -226,8 +227,8 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
             self.extra_link_2 = phpmyadmin_url
             
         self.container_name = container_name
-        request_time = time.perf_counter() - start
-        print("Start container request completed in {0:.0f}s".format(request_time))
+        request_time = (time.perf_counter() - start)*1000
+        print("Start container request completed in {0:.0f} ms".format(request_time))
         
         return {"container": self.container, "web_url": self.extra_link, "php_url": self.extra_link_2, "ssh_ip": self.ssh_ip, "db_ip": self.db_ip}
     
@@ -255,8 +256,8 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
             print("[{}]  -  DELETE {}  -  {}".format(dateTimeObj,"/stacks",response.elapsed))
             print("deleted")
         
-        request_time = time.perf_counter() - start
-        print("Delete container request completed in {0:.0f}s".format(request_time))
+        request_time = (time.perf_counter() - start)*1000
+        print("Delete container request completed in {0:.0f} ms".format(request_time))
 
         self.container = None
         self.extra_link = None

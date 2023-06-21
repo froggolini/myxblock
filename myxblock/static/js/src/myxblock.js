@@ -29,7 +29,6 @@ function MyXBlock(runtime, element, xblock_type) {
         } else if (xblock_type.type === "xss") {
             $("#webAccess a").prop("href", result.web_url) 
         }
-        
     }
 
     function resetLink() {
@@ -43,11 +42,8 @@ function MyXBlock(runtime, element, xblock_type) {
         $(".create-lab").attr("disabled", false);
         $('.placeholderXss').hide(xblock_type.type === 'xss');
         $('.placeholderSqli').hide(xblock_type.type === 'sqli');
-        
-     
     }
     
-
     var handlerStartUrl = runtime.handlerUrl(element, 'create_container');
     
     $('.create-lab', element).click(function(eventObject) {
@@ -68,7 +64,7 @@ function MyXBlock(runtime, element, xblock_type) {
               data: JSON.stringify({"imageName": xblock_type.type}),
               success: resetLink
             });
-          }, 2000000);
+          }, 600000);
     });
 
     var handlerStopUrl = runtime.handlerUrl(element, 'stop_container');
