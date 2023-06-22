@@ -2,6 +2,7 @@ version: '3.8'
 services:
     php-apache-environment:
         image: web-sqli
+        hostname: defender
         depends_on:
             - db
         ports:
@@ -11,6 +12,7 @@ services:
             - attack-defend
     attacker: 
         image: "attacker"
+        hostname: attacker
         depends_on:
             - db
         tty: true

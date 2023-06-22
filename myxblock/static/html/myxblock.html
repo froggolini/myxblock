@@ -13,10 +13,12 @@
             <p id="phpAccess"><a href="" target="_blank">PhpMyAdmin</a></p>
             <p>Creds untuk login ke phpMyAdmin dengan menggunakan: (admin:password)</p> 
         </div>
-        <button class="accordion">SSH Access to defender (web app)</button>
+        <button class="accordion">Victim's IP Address & Terminal Access</button>
         <div class="panel">
-            <p>Anda dapat SSH ke server web dengan perintah berikut dengan password "password":</p>
-            <p class="code" id="sshAccess">$ ssh defender@{{self.ssh_ip}}</p>
+            <p>Anda dapat menyerang victim dengan menggunakan alamat IP berikut:</p>
+            <p class="code" id="sshAccess">{{self.ssh_ip}}</p>
+            <p id="victimConsole"><a href="{{self.extra_console}}" onclick="window.open(this.href, '', 
+            'width=1100,height=500'); return false;">Access to Victim's Terminal</a></p>
         </div>
         <button class="accordion">DB Configuration</button>
         <div class="panel">
@@ -49,10 +51,12 @@
             <p id="phpAccess"><a href="{{self.extra_link_2}}" target="_blank">PhpMyAdmin</a></p>
             <p>Creds untuk login ke phpMyAdmin dengan menggunakan: (admin:password)</p> 
         </div>
-        <button class="accordion">SSH Access to defender (web app)</button>
+        <button class="accordion">Victim's IP Address & Terminal Access</button>
         <div class="panel">
-            <p>Anda dapat SSH ke server web dengan perintah berikut dengan password "password":</p>
-            <p class="code" id="sshAccess">$ ssh defender@{{self.ssh_ip}}</p>
+            <p>Anda dapat menyerang victim dengan menggunakan alamat IP berikut:</p>
+            <p class="code" id="sshAccess">{{self.ssh_ip}}</p>
+            <p id="victimConsole"><a href="{{self.extra_console}}" onclick="window.open(this.href, '', 
+            'width=1100,height=500'); return false;">Access to Victim's Terminal</a></p>
         </div>
         <button class="accordion">DB Configuration</button>
         <div class="panel">

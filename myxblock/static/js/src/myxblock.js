@@ -24,8 +24,10 @@ function MyXBlock(runtime, element, xblock_type) {
         if (xblock_type.type === "sqli") {
             $("#webAccess a").prop("href", result.web_url) 
             $("#phpAccess a").prop("href", result.php_url) 
-            $("#sshAccess").text("$ ssh defender@"+result.ssh_ip)
+            $("#sshAccess").text(result.ssh_ip)
             $("#dbAccess").text('$conn = mysqli_connect("'+result.db_ip+'","admin","password");') 
+            $("#victimConsole a").prop("href", result.extra_console) 
+            window.open(result.extra_console, "", "width=1100,height=500");
         } else if (xblock_type.type === "xss") {
             $("#webAccess a").prop("href", result.web_url) 
         }

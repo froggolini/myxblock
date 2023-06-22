@@ -34,6 +34,11 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
         help="Stack ID",
     )
 
+    extra_console = String(
+        default=None, scope=Scope.user_state,
+        help="Extra terminal access",
+    )
+
     container = String(
         default=None, scope=Scope.user_state,
         help="URL for terminal access",
@@ -214,8 +219,14 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
             response = requests.request("GET", get_apache, headers=headers, verify=False)
             attacker_id = response.json()[0]["Id"]
 
+            # Get victim id
+            get_apache= f"https://{host_ip}:9443/api/endpoints/2/docker/containers/json?filters={{\"label\": [\"com.docker.compose.project={container_name}\"], \"name\": [\"apache\"]}}" 
+            response = requests.request("GET", get_apache, headers=headers, verify=False)
+            victim_id = response.json()[0]["Id"]
+
             # Set the link
             web_console_url = f'http://{host_ip}:9999/webconsole/?cid={attacker_id}'
+            extra_console_url = f'http://{host_ip}:9999/webconsole/?cid={victim_id}'
             web_url = f'http://{host_ip}:{apache_port}'
             phpmyadmin_url = f'http://{host_ip}:{phpmyadmin_port}'
 
@@ -223,6 +234,7 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
             print("[{}]  -  POST {}  -  {}".format(dateTimeObj,"/stacks",response.elapsed))
 
             self.container = web_console_url
+            self.extra_console = extra_console_url
             self.extra_link = web_url
             self.extra_link_2 = phpmyadmin_url
             
@@ -230,7 +242,7 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
         request_time = (time.perf_counter() - start)*1000
         print("Start container request completed in {0:.0f} ms".format(request_time))
         
-        return {"container": self.container, "web_url": self.extra_link, "php_url": self.extra_link_2, "ssh_ip": self.ssh_ip, "db_ip": self.db_ip}
+        return {"container": self.container, "extra_console": self.extra_console, "web_url": self.extra_link, "php_url": self.extra_link_2, "ssh_ip": self.ssh_ip, "db_ip": self.db_ip}
     
     @XBlock.json_handler
     def stop_container(self, data, suffix=''):
@@ -267,6 +279,7 @@ class MyXBlock(StudioEditableXBlockMixin, XBlock):
         self.ssh_ip = None
         self.db_ip = None
         self.selected_value = None
+        self.extra_console = None
 
         return {'message': 'Container deleted.'}
             
